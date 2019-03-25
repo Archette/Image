@@ -15,5 +15,12 @@
             "Archette\\Image\\": "src"
         }
     },
-    "require": {}
+    "require": {
+        "rixafy/image": "dev-master"
+    },
+    "config": {
+        "platform": {
+            "php": "7.1"
+        }
+    }
 }
