@@ -1,0 +1,19 @@
+{
+    "name": "archette/image",
+    "description": "Image renderer and CRUD model, implementation of rixafy/image to Nette Framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rixafy",
+            "email": "rixafy@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Archette\\Image\\": "src"
+        }
+    },
+    "require": {}
+}
