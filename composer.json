@@ -16,7 +16,8 @@
         }
     },
     "require": {
-        "rixafy/image": "dev-master"
+        "rixafy/image": "dev-master",
+        "nette/di": "^2.4"
     },
     "config": {
         "platform": {
