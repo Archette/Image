@@ -30,6 +30,7 @@ class ImageExtension extends \Nette\DI\CompilerExtension
         $this->getContainerBuilder()->getDefinitionByType(\Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver::class)
             ->addSetup('addPaths', [['vendor/rixafy/image']]);
     }
+
     public function loadConfiguration()
     {
         $this->validateConfig($this->defaults);
