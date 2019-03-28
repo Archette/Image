@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Archette\Image;
 
+use Archette\Image\Latte\ImageTagFilter;
 use Archette\Image\Latte\ImageUrlFilter;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Rixafy\Image\ImageConfig;
@@ -78,5 +79,11 @@ class ImageExtension extends \Nette\DI\CompilerExtension
 
         $this->getContainerBuilder()->getDefinitionByType(ILatteFactory::class)
             ->addSetup('addFilter', ['imageUrl', $urlFilter]);
+
+        $tagFilter = $this->getContainerBuilder()->addDefinition($this->prefix('imageTagFilter'))
+            ->setFactory(ImageTagFilter::class);
+
+        $this->getContainerBuilder()->getDefinitionByType(ILatteFactory::class)
+            ->addSetup('addFilter', ['imageTag', $tagFilter]);
     }
 }
