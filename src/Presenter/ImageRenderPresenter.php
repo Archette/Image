@@ -15,7 +15,7 @@ class ImageRenderPresenter extends \Nette\Application\UI\Presenter
     /** @var LocaleImageFacade @inject */
     public $localeImageFacade;
 
-    public function actionDefault()
+    public function actionDefault(string $id, string $urlName, string $languageCode = null)
     {
         //TODO: Render logic, figure out if it is LocaleImage or Image entity
     }

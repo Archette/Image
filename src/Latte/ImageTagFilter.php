@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Archette\Image\Latte;
 
 use Latte\Engine;
+use Nette\Application\LinkGenerator;
+use Rixafy\Doctrination\Language\LanguageProvider;
 use Rixafy\Image\Image;
 use Rixafy\Image\ImageFacade;
 use Rixafy\Image\LocaleImage\LocaleImage;
@@ -12,14 +14,26 @@ use Rixafy\Image\LocaleImage\LocaleImageFacade;
 
 class ImageTagFilter
 {
+    /** @var LanguageProvider */
+    private $languageProvider;
+
+    /** @var LinkGenerator */
+    private $linkGenerator;
+
     /** @var ImageFacade */
     private $imageFacade;
 
     /** @var LocaleImageFacade */
     private $localeImageFacade;
 
-    public function __construct(ImageFacade $imageFacade, LocaleImageFacade $localeImageFacade)
-    {
+    public function __construct(
+        LanguageProvider $languageProvider,
+        LinkGenerator $linkGenerator,
+        ImageFacade $imageFacade,
+        LocaleImageFacade $localeImageFacade
+    ) {
+        $this->languageProvider = $languageProvider;
+        $this->linkGenerator = $linkGenerator;
         $this->imageFacade = $imageFacade;
         $this->localeImageFacade = $localeImageFacade;
     }
@@ -33,6 +47,8 @@ class ImageTagFilter
      * @throws \Nette\Utils\ImageException
      * @throws \Rixafy\Image\Exception\ImageNotFoundException
      * @throws \Rixafy\Image\LocaleImage\Exception\LocaleImageNotFoundException
+     * @throws \Rixafy\Doctrination\Language\Exception\LanguageNotProvidedException
+     * @throws \Nette\Application\UI\InvalidLinkException
      */
     public function __invoke($entity, int $width = null, int $height = null, string $resizeTypeName = 'fit')
     {
@@ -40,17 +56,25 @@ class ImageTagFilter
         $resizeType = (int) defined($constantName) ? constant($constantName) : 0;
 
         if ($entity instanceof Image) {
-            $source = $this->imageFacade->generate($entity->getId(), $width, $height, $resizeType);
+            $this->imageFacade->generate($entity->getId(), $width, $height, $resizeType);
+            $source = $this->linkGenerator->link('ImageRender', [
+                'id' => $entity->getId(),
+                'urlName' => $entity->getUrlName()
+            ]);
 
         } elseif ($entity instanceof LocaleImage) {
-            $source = $this->localeImageFacade->generate($entity->getId(), $width, $height, $resizeType);
+            $this->localeImageFacade->generate($entity->getId(), $width, $height, $resizeType);
+            $source = $this->linkGenerator->link('ImageRender', [
+                'id' => $entity->getId(),
+                'urlName' => $entity->getUrlName(),
+                'languageCode' => $this->languageProvider->getLanguage()->getIso()
+            ]);
+
         } else {
-            throw new \TypeError('Filter expects first parameter to be Rixafy\Image or Rixafy\Image\LocaleImage');
+            throw new \TypeError('Filter expects first parameter to be Rixafy\Image\Image or Rixafy\Image\LocaleImage\LocaleImage');
         }
 
-        $engine = new Engine;
-
-        return $engine->renderToString(__DIR__ . '/Templates/img.latte', [
+        return (new Engine)->renderToString(__DIR__ . '/Templates/img.latte', [
             'source' => $source,
             'title' => $entity->getTitle(),
             'alternativeText' => $entity->getAlternativeText()
