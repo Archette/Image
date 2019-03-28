@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Archette\Image;
 
+use Archette\Image\Latte\ImageUrlFilter;
+use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Rixafy\Image\ImageConfig;
 use Rixafy\Image\ImageFacade;
 use Rixafy\Image\ImageFactory;
@@ -70,5 +72,11 @@ class ImageExtension extends \Nette\DI\CompilerExtension
 
         $this->getContainerBuilder()->addDefinition($this->prefix('imageGroupFactory'))
             ->setFactory(ImageGroupFactory::class);
+
+        $urlFilter = $this->getContainerBuilder()->addDefinition($this->prefix('imageUrlFilter'))
+            ->setFactory(ImageUrlFilter::class);
+
+        $this->getContainerBuilder()->getDefinitionByType(ILatteFactory::class)
+            ->addSetup('addFilter', ['imageUrl', $urlFilter]);
     }
 }
