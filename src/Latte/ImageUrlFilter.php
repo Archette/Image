@@ -35,7 +35,8 @@ class ImageUrlFilter
      */
     public function __invoke($entity, int $width = null, int $height = null, string $resizeTypeName = 'fit')
     {
-        $resizeType = (int) constant('\Nette\Utils\Image::' . strtoupper($resizeTypeName));
+        $constantName = '\Nette\Utils\Image::' . strtoupper($resizeTypeName);
+        $resizeType = (int) defined($constantName) ? constant($constantName) : 0;
 
         if ($entity instanceof Image) {
             return $this->imageFacade->generate($entity->getId(), $width, $height, $resizeType);
