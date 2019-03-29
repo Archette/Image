@@ -56,20 +56,27 @@ class ImageUrlFilter
 
         if ($entity instanceof Image) {
             $this->imageFacade->generate($entity->getId(), $width, $height, $resizeType);
-            return $this->linkGenerator->link('ImageRender', [
-                'id' => $entity->getId(),
-                'urlName' => $entity->getUrlName()
-            ]);
+            $language = null;
 
         } elseif ($entity instanceof LocaleImage) {
             $this->localeImageFacade->generate($entity->getId(), $width, $height, $resizeType);
-            return $this->linkGenerator->link('ImageRender', [
-                'id' => $entity->getId(),
-                'urlName' => $entity->getUrlName(),
-                'language' => $this->languageProvider->getLanguage()->getIso()
-            ]);
+            $language = $this->languageProvider->getLanguage()->getIso();
+
+        } else {
+            throw new \TypeError('Filter expects first parameter to be Rixafy\Image or Rixafy\Image\LocaleImage');
         }
 
-        throw new \TypeError('Filter expects first parameter to be Rixafy\Image or Rixafy\Image\LocaleImage');
+        $parameters = [
+            'id' => $entity->getId(),
+            'urlName' => $entity->getUrlName(),
+            'language' => $language,
+            'renderOptions' => base64_encode(json_encode([
+                'width' => $width,
+                'height' => $height,
+                'resizeType' => $resizeType
+            ]))
+        ];
+
+        return $this->linkGenerator->link('ImageRender', $parameters);
     }
 }
