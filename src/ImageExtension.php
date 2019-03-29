@@ -39,7 +39,7 @@ class ImageExtension extends \Nette\DI\CompilerExtension
         $this->validateConfig($this->defaults);
 
         $this->getContainerBuilder()->addDefinition($this->prefix('imageConfig'))
-            ->setFactory(ImageConfig::class, [$this->config['savePath'], $this->config['cachePath'], $this->config['webpOptimization']]);
+            ->setFactory(ImageConfig::class, [$this->config['savePath'], $this->config['cachePath'], $this->config['webPath'], $this->config['webpOptimization']]);
 
         $this->getContainerBuilder()->addDefinition($this->prefix('imageRenderer'))
             ->setFactory(ImageRenderer::class);
