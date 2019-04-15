@@ -6,7 +6,11 @@ namespace Archette\Image;
 
 use Archette\Image\Latte\ImageTagFilter;
 use Archette\Image\Latte\ImageUrlFilter;
+use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
+use Nette\DI\ServiceDefinition;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 use Rixafy\Image\Group\ImageGroupFacade;
 use Rixafy\Image\Group\ImageGroupFactory;
 use Rixafy\Image\Group\ImageGroupRepository;
@@ -22,22 +26,24 @@ use Rixafy\Image\LocaleImage\LocaleImageRepository;
 
 class ImageExtension extends \Nette\DI\CompilerExtension
 {
-    private $defaults = [
-        'savePath' => 'public/images/uploaded/',
-        'cachePath' => '%tempDir%/images',
-        'webpOptimization' => true
-    ];
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'savePath' => Expect::string(),
+			'cachePath' => Expect::string(),
+			'webpOptimization' => Expect::bool(true),
+		]);
+	}
 
     public function beforeCompile()
     {
-        $this->getContainerBuilder()->getDefinitionByType(\Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver::class)
-            ->addSetup('addPaths', [['vendor/rixafy/image']]);
+    	/** @var ServiceDefinition $annotationDriver */
+    	$annotationDriver = $this->getContainerBuilder()->getDefinitionByType(AnnotationDriver::class);
+        $annotationDriver->addSetup('addPaths', [['vendor/rixafy/image']]);
     }
 
     public function loadConfiguration()
     {
-        $this->validateConfig($this->defaults);
-
         $this->getContainerBuilder()->addDefinition($this->prefix('imageConfig'))
             ->setFactory(ImageConfig::class, [$this->config['savePath'], $this->config['cachePath'], $this->config['webPath'], $this->config['webpOptimization']]);
 
@@ -77,13 +83,13 @@ class ImageExtension extends \Nette\DI\CompilerExtension
         $urlFilter = $this->getContainerBuilder()->addDefinition($this->prefix('imageUrlFilter'))
             ->setFactory(ImageUrlFilter::class);
 
-        $this->getContainerBuilder()->getDefinitionByType(ILatteFactory::class)
-            ->addSetup('addFilter', ['imageUrl', $urlFilter]);
-
         $tagFilter = $this->getContainerBuilder()->addDefinition($this->prefix('imageTagFilter'))
             ->setFactory(ImageTagFilter::class);
 
-        $this->getContainerBuilder()->getDefinitionByType(ILatteFactory::class)
-            ->addSetup('addFilter', ['imageTag', $tagFilter]);
+		/** @var ServiceDefinition $latteFactory */
+		$latteFactory = $this->getContainerBuilder()->getDefinitionByType(ILatteFactory::class);
+
+        $latteFactory->addSetup('addFilter', ['imageUrl', $urlFilter]);
+        $latteFactory->addSetup('addFilter', ['imageTag', $tagFilter]);
     }
 }
