@@ -8,7 +8,7 @@ use Archette\Image\Latte\ImageTagFilter;
 use Archette\Image\Latte\ImageUrlFilter;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
-use Nette\DI\ServiceDefinition;
+use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Rixafy\Image\Group\ImageGroupFacade;
