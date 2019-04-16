@@ -8,6 +8,7 @@ use Archette\Image\Latte\ImageTagFilter;
 use Archette\Image\Latte\ImageUrlFilter;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
+use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
@@ -24,7 +25,7 @@ use Rixafy\Image\LocaleImage\LocaleImageFacade;
 use Rixafy\Image\LocaleImage\LocaleImageFactory;
 use Rixafy\Image\LocaleImage\LocaleImageRepository;
 
-class ImageExtension extends \Nette\DI\CompilerExtension
+class ImageExtension extends CompilerExtension
 {
 	public function getConfigSchema(): Schema
 	{
