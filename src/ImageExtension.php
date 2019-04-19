@@ -32,6 +32,7 @@ class ImageExtension extends CompilerExtension
 		return Expect::structure([
 			'savePath' => Expect::string(),
 			'cachePath' => Expect::string(),
+			'webPath' => Expect::string(),
 			'webpOptimization' => Expect::bool(true),
 		]);
 	}
@@ -46,7 +47,7 @@ class ImageExtension extends CompilerExtension
     public function loadConfiguration()
     {
         $this->getContainerBuilder()->addDefinition($this->prefix('imageConfig'))
-            ->setFactory(ImageConfig::class, [$this->config['savePath'], $this->config['cachePath'], $this->config['webPath'], $this->config['webpOptimization']]);
+			->setFactory(ImageConfig::class, [$this->config->savePath, $this->config->cachePath, $this->config->webPath, $this->config->webpOptimization]);
 
         $this->getContainerBuilder()->addDefinition($this->prefix('imageRenderer'))
             ->setFactory(ImageRenderer::class);
