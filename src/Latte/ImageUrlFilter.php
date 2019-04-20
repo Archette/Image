@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace Archette\Image\Latte;
 
 use Nette\Application\LinkGenerator;
-use Rixafy\Doctrination\Language\LanguageProvider;
+use Nette\Application\UI\InvalidLinkException;
+use Nette\Utils\ImageException;
+use Rixafy\Image\Exception\ImageNotFoundException;
 use Rixafy\Image\Image;
 use Rixafy\Image\ImageFacade;
+use Rixafy\Image\LocaleImage\Exception\LocaleImageNotFoundException;
 use Rixafy\Image\LocaleImage\LocaleImage;
 use Rixafy\Image\LocaleImage\LocaleImageFacade;
+use Rixafy\Language\Exception\LanguageNotProvidedException;
+use Rixafy\Language\LanguageProvider;
+use TypeError;
 
 class ImageUrlFilter
 {
@@ -37,19 +43,14 @@ class ImageUrlFilter
         $this->localeImageFacade = $localeImageFacade;
     }
 
-    /**
-     * @param $entity
-     * @param int|null $width
-     * @param int|null $height
-     * @param string $resizeTypeName
-     * @return string
-     * @throws \Nette\Utils\ImageException
-     * @throws \Rixafy\Image\Exception\ImageNotFoundException
-     * @throws \Rixafy\Image\LocaleImage\Exception\LocaleImageNotFoundException
-     * @throws \Nette\Application\UI\InvalidLinkException
-     * @throws \Rixafy\Doctrination\Language\Exception\LanguageNotProvidedException
-     */
-    public function __invoke($entity, int $width = null, int $height = null, string $resizeTypeName = 'fit')
+	/**
+	 * @throws InvalidLinkException
+	 * @throws ImageException
+	 * @throws ImageNotFoundException
+	 * @throws LocaleImageNotFoundException
+	 * @throws LanguageNotProvidedException
+	 */
+	public function __invoke($entity, int $width = null, int $height = null, string $resizeTypeName = 'fit')
     {
         $constantName = '\Nette\Utils\Image::' . strtoupper($resizeTypeName);
         $resizeType = (int) defined($constantName) ? constant($constantName) : 0;
@@ -63,7 +64,7 @@ class ImageUrlFilter
             $language = $this->languageProvider->getLanguage()->getIso();
 
         } else {
-            throw new \TypeError('Filter expects first parameter to be Rixafy\Image or Rixafy\Image\LocaleImage');
+            throw new TypeError('Filter expects first parameter to be Rixafy\Image or Rixafy\Image\LocaleImage');
         }
 
         $parameters = [

@@ -6,11 +6,16 @@ namespace Archette\Image\Latte;
 
 use Latte\Engine;
 use Nette\Application\LinkGenerator;
-use Rixafy\Doctrination\Language\LanguageProvider;
+use Nette\Application\UI\InvalidLinkException;
+use Nette\Utils\ImageException;
+use Rixafy\Image\Exception\ImageNotFoundException;
 use Rixafy\Image\Image;
 use Rixafy\Image\ImageFacade;
+use Rixafy\Image\LocaleImage\Exception\LocaleImageNotFoundException;
 use Rixafy\Image\LocaleImage\LocaleImage;
 use Rixafy\Image\LocaleImage\LocaleImageFacade;
+use Rixafy\Language\Exception\LanguageNotProvidedException;
+use Rixafy\Language\LanguageProvider;
 
 class ImageTagFilter
 {
@@ -38,19 +43,14 @@ class ImageTagFilter
         $this->localeImageFacade = $localeImageFacade;
     }
 
-    /**
-     * @param $entity
-     * @param int|null $width
-     * @param int|null $height
-     * @param string $resizeTypeName
-     * @return string
-     * @throws \Nette\Utils\ImageException
-     * @throws \Rixafy\Image\Exception\ImageNotFoundException
-     * @throws \Rixafy\Image\LocaleImage\Exception\LocaleImageNotFoundException
-     * @throws \Rixafy\Doctrination\Language\Exception\LanguageNotProvidedException
-     * @throws \Nette\Application\UI\InvalidLinkException
-     */
-    public function __invoke($entity, int $width = null, int $height = null, string $resizeTypeName = 'fit')
+	/**
+	 * @throws InvalidLinkException
+	 * @throws ImageException
+	 * @throws ImageNotFoundException
+	 * @throws LocaleImageNotFoundException
+	 * @throws LanguageNotProvidedException
+	 */
+	public function __invoke($entity, int $width = null, int $height = null, string $resizeTypeName = 'fit')
     {
         $constantName = '\Nette\Utils\Image::' . strtoupper($resizeTypeName);
         $resizeType = (int) defined($constantName) ? constant($constantName) : 0;

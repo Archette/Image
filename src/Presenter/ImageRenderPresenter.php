@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rixafy\Image\Presenter;
 
+use Nette\Application\UI\Presenter;
 use Nette\Utils\ImageException;
 use Ramsey\Uuid\Uuid;
 use Rixafy\Image\Exception\ImageNotFoundException;
@@ -12,7 +13,7 @@ use Rixafy\Image\LocaleImage\Exception\LocaleImageNotFoundException;
 use Rixafy\Image\LocaleImage\LocaleImageFacade;
 use Nette\Utils\Image as NetteImage;
 
-class ImageRenderPresenter extends \Nette\Application\UI\Presenter
+class ImageRenderPresenter extends Presenter
 {
     /** @var ImageFacade @inject */
     public $imageFacade;
@@ -20,12 +21,6 @@ class ImageRenderPresenter extends \Nette\Application\UI\Presenter
     /** @var LocaleImageFacade @inject */
     public $localeImageFacade;
 
-    /**
-     * @param string $id
-     * @param string $urlName
-     * @param string $renderOptions
-     * @param string|null $languageCode
-     */
     public function actionDefault(string $id, string $urlName, string $renderOptions, string $languageCode = null)
     {
         $options = json_decode(base64_decode($renderOptions));
