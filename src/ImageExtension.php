@@ -9,6 +9,7 @@ use Archette\Image\Latte\ImageUrlFilter;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
@@ -88,10 +89,10 @@ class ImageExtension extends CompilerExtension
         $tagFilter = $this->getContainerBuilder()->addDefinition($this->prefix('imageTagFilter'))
             ->setFactory(ImageTagFilter::class);
 
-		/** @var ServiceDefinition $latteFactory */
+		/** @var FactoryDefinition $latteFactory */
 		$latteFactory = $this->getContainerBuilder()->getDefinitionByType(ILatteFactory::class);
 
-        $latteFactory->addSetup('addFilter', ['imageUrl', $urlFilter]);
-        $latteFactory->addSetup('addFilter', ['imageTag', $tagFilter]);
+        $latteFactory->getResultDefinition()->addSetup('addFilter', ['imageUrl', $urlFilter]);
+        $latteFactory->getResultDefinition()->addSetup('addFilter', ['imageTag', $tagFilter]);
     }
 }
