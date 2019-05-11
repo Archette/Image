@@ -37,14 +37,14 @@ class ImageExtension extends CompilerExtension
 		]);
 	}
 
-    public function beforeCompile()
+    public function beforeCompile(): void
     {
     	/** @var ServiceDefinition $annotationDriver */
     	$annotationDriver = $this->getContainerBuilder()->getDefinitionByType(AnnotationDriver::class);
         $annotationDriver->addSetup('addPaths', [['vendor/rixafy/image']]);
     }
 
-    public function loadConfiguration()
+    public function loadConfiguration(): void
     {
         $this->getContainerBuilder()->addDefinition($this->prefix('imageConfig'))
 			->setFactory(ImageConfig::class, [$this->config->savePath, $this->config->cachePath, $this->config->webpOptimization]);
