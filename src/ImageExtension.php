@@ -12,7 +12,6 @@ use Nette\Schema\Schema;
 use Rixafy\Image\ImageConfig;
 use Rixafy\Image\ImageFacade;
 use Rixafy\Image\ImageFactory;
-use Rixafy\Image\ImageRepository;
 
 class ImageExtension extends CompilerExtension
 {
@@ -39,9 +38,6 @@ class ImageExtension extends CompilerExtension
 
         $this->getContainerBuilder()->addDefinition($this->prefix('imageFacade'))
             ->setFactory(ImageFacade::class);
-
-        $this->getContainerBuilder()->addDefinition($this->prefix('imageRepository'))
-            ->setFactory(ImageRepository::class);
 
         $this->getContainerBuilder()->addDefinition($this->prefix('imageFactory'))
             ->setFactory(ImageFactory::class);
