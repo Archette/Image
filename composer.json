@@ -20,7 +20,7 @@
         "rixafy/image": "dev-master",
         "nette/di": "^3.0",
         "nette/application": "^3.0",
-        "latte/latte": "^3.0",
+        "latte/latte": "^2.5",
         "ext-json": "*"
     },
     "config": {
