@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Archette\Image;
 
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Schema\Expect;
