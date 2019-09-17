@@ -19,6 +19,7 @@ class ImageExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'savePath' => Expect::string('%appDir%/../public/img/upload/%year%/%month%/'),
+			'publicPath' => Expect::string('/img/upload/%year%/%month%/'),
 			'cachePath' => Expect::string('images'),
 			'webpOptimization' => Expect::bool(true),
 		]);
@@ -34,7 +35,7 @@ class ImageExtension extends CompilerExtension
     public function loadConfiguration(): void
     {
         $this->getContainerBuilder()->addDefinition($this->prefix('imageConfig'))
-			->setFactory(ImageConfig::class, [$this->config->savePath, $this->config->cachePath, $this->config->webpOptimization]);
+			->setFactory(ImageConfig::class, [$this->config->savePath, $this->config->publicPath, $this->config->cachePath, $this->config->webpOptimization]);
 
         $this->getContainerBuilder()->addDefinition($this->prefix('imageFacade'))
             ->setFactory(ImageFacade::class);
