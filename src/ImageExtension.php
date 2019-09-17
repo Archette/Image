@@ -18,7 +18,7 @@ class ImageExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'savePath' => Expect::string('%appDir%/../public/img/upload'),
+			'savePath' => Expect::string('%appDir%/../public/img/upload/%year%/%month%/'),
 			'cachePath' => Expect::string('images'),
 			'webpOptimization' => Expect::bool(true),
 		]);
