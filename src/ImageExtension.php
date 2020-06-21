@@ -27,9 +27,14 @@ class ImageExtension extends CompilerExtension
 
     public function beforeCompile(): void
     {
-    	/** @var ServiceDefinition $annotationDriver */
-    	$annotationDriver = $this->getContainerBuilder()->getDefinitionByType(MappingDriver::class);
-        $annotationDriver->addSetup('addPaths', [['vendor/rixafy/image']]);
+		if (class_exists('Nettrine\ORM\DI\Helpers\MappingHelper')) {
+			\Nettrine\ORM\DI\Helpers\MappingHelper::of($this)
+				->addAnnotation('Rixafy\Image', __DIR__ . '/../../../rixafy/image');
+		} else {
+			/** @var ServiceDefinition $annotationDriver */
+			$annotationDriver = $this->getContainerBuilder()->getDefinitionByType(MappingDriver::class);
+			$annotationDriver->addSetup('addPaths', [['vendor/rixafy/image']]);
+		}
     }
 
     public function loadConfiguration(): void
