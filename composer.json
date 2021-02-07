@@ -16,7 +16,7 @@
         }
     },
     "require": {
-        "doctrine/orm": "2.7.x-dev",
+        "doctrine/orm": "^2.8",
         "rixafy/image": "dev-master",
         "nette/di": "^3.0",
         "nette/application": "^3.0",
